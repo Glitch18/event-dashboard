@@ -16,7 +16,7 @@ Make sure you have access to the DB connection string to set the environment var
 
 ## Event processing pipeline
 
-The pipeline monitors live `UserOperationEvents` from the `EntryPoint` contract, and adds each event to a off-chain database for storage.
+The pipeline monitors live `UserOperationEvents` from the `EntryPoint` contract, and adds each event to an off-chain database for storage.
 
 The pipeline has a list of bundler addresses and their Entities. Some of them being:
 
@@ -25,6 +25,8 @@ The pipeline has a list of bundler addresses and their Entities. Some of them be
 - Pimlico
 
 and more. The pipeline checks each event for the bundler when adding it to the database.
+
+If the pipeline is not running, no new events are added to the database. The next time the pipeline is run, it covers up for the missed events by resuming from the last processed block, and then continues adding real time events to the DB. The Grafana dashboard will always reflect the database.
 
 ## Grafana Dashboard
 
@@ -40,4 +42,4 @@ The dashboard has a **Time Interval** variable that can be used to change the ti
 
 ![Interval Option](./images/IntervalSS.png)
 
-**Please note** as Grafana does not support sharing template variables on public dashboards yet, this might not be available on the public dashboard link. Please use the original dashboard link [here](ttps://eventdash.grafana.net/goto/Lk5loZ8Ig?orgId=1)
+**Please note** as Grafana does not support sharing template variables on public dashboards yet, this might not be available on the public dashboard link. Please use the original dashboard link [here](https://eventdash.grafana.net/goto/Lk5loZ8Ig?orgId=1).
