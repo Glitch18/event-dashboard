@@ -87,5 +87,5 @@ export async function addEvent(event: UserOperationEvent, provider: ethers.Provi
     from: sender,
     bundler,
   })
-  console.log('Added event to database')
+  console.log(`Added event to database from ${sender} with bundler ${bundler}`)
 }
