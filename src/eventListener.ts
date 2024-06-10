@@ -58,22 +58,4 @@ export async function listen(contract: Contract): Promise<void> {
       console.error('Error processing UserOperationEvent:', error)
     }
   })
-
-  contract.on('error', (error) => {
-    console.error('Error with contract listener:', error)
-  })
-
-  // Handle disconnection or reconnection attempts
-  contract.runner?.provider?.on('error', (error) => {
-    console.error('Provider error:', error)
-  })
-
-  contract.runner?.provider?.on('close', () => {
-    console.warn('Provider connection closed')
-    // Optionally implement reconnection logic here
-  })
-
-  contract.runner?.provider?.on('connect', () => {
-    console.log('Provider reconnected')
-  })
 }
