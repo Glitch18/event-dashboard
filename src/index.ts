@@ -17,6 +17,17 @@ process.on('SIGINT', async () => {
   })
 })
 
+// Save progress and disconnect DB
+process.on('unhandledRejection', async (reason, promise) => {
+  // Save current block number in order to resume from this block
+  const blockNumber = await provider.getBlockNumber()
+  fs.writeFileSync(path.join(__dirname, '../../blockNumber.txt'), blockNumber.toString())
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason)
+  await disconnectDB().then(() => {
+    process.exit(1)
+  })
+})
+
 // TODO: Setup a logger with multiple levels
 // Maybe winston?
 

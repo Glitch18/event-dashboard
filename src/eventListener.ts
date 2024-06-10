@@ -54,7 +54,6 @@ export async function listen(contract: Contract): Promise<void> {
       }
 
       await addEvent(userOpEvent, payload.log.provider)
-      console.log(`Event processed and added to database: ${JSON.stringify(userOpEvent)}`)
     } catch (error) {
       console.error('Error processing UserOperationEvent:', error)
     }
