@@ -58,7 +58,7 @@ export const createTable = async (name: string) => {
 
   // Check if table already exists
   const collections = await db.listCollections().toArray()
-  if (name in collections) {
+  if (collections.some((collection) => collection.name === name)) {
     console.log(`Collection ${name} already exists`)
     return
   }
