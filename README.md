@@ -8,7 +8,7 @@ Use the following steps to setup the event processing pipeline:
 
 ```
 npm i
-export CONNECTION_STRING=<DB connection string>
+export CONNECTION_STRING='<DB connection string>'
 npm run start
 ```
 
