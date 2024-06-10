@@ -48,8 +48,6 @@ connectDB()
       return listenHistory(contract, blockNumber - 20)
     }
   })
-  // .then(() => disconnectDB())
-  // .then(() => console.log('Done'))
   .then(() => listen(contract))
   .catch((err) => {
     console.error(err)

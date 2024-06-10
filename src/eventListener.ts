@@ -35,23 +35,46 @@ export async function listenHistory(contract: Contract, fromBlock: number, toBlo
   console.log('Received historic events')
 }
 
-// TODO: Try replacing with https://medium.com/coinmonks/top-10-polygon-apis-6187fc965851
-export async function listen(contract: Contract) {
+export async function listen(contract: Contract): Promise<void> {
   console.log(`Listening for UserOperationEvent...`)
-  contract.on('UserOperationEvent', (...args) => {
-    // LOGGER.info(`Received event: ${eventName}`);
-    const payload: ContractEventPayload = args[args.length - 1]
-    const userOpEvent: UserOperationEvent = {
-      userOpHash: args[0],
-      sender: args[1],
-      paymaster: args[2],
-      nonce: args[3],
-      success: args[4],
-      actualGas: args[5],
-      gasUsed: args[6],
-      timestamp: Date.now(),
-      txHash: payload.log.transactionHash,
+
+  contract.on('UserOperationEvent', async (...args) => {
+    try {
+      const payload: any = args[args.length - 1]
+      const userOpEvent: UserOperationEvent = {
+        userOpHash: args[0],
+        sender: args[1],
+        paymaster: args[2],
+        nonce: args[3],
+        success: args[4],
+        actualGas: args[5],
+        gasUsed: args[6],
+        timestamp: Date.now(),
+        txHash: payload.log.transactionHash,
+      }
+
+      await addEvent(userOpEvent, payload.log.provider)
+      console.log(`Event processed and added to database: ${JSON.stringify(userOpEvent)}`)
+    } catch (error) {
+      console.error('Error processing UserOperationEvent:', error)
     }
-    addEvent(userOpEvent, payload.log.provider)
+  })
+
+  contract.on('error', (error) => {
+    console.error('Error with contract listener:', error)
+  })
+
+  // Handle disconnection or reconnection attempts
+  contract.runner?.provider?.on('error', (error) => {
+    console.error('Provider error:', error)
+  })
+
+  contract.runner?.provider?.on('close', () => {
+    console.warn('Provider connection closed')
+    // Optionally implement reconnection logic here
+  })
+
+  contract.runner?.provider?.on('connect', () => {
+    console.log('Provider reconnected')
   })
 }
