@@ -56,6 +56,12 @@ export const createTable = async (name: string) => {
     throw new Error('Database not connected')
   }
 
+  // Check if table already exists
+  const collections = await db.listCollections().toArray()
+  if (name in collections) {
+    console.log(`Collection ${name} already exists`)
+    return
+  }
   await db.createCollection(name)
   console.log(`Created collection ${name}`)
 }
